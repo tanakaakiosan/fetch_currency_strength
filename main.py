@@ -48,10 +48,16 @@ def analyze():
         print(f"[ERROR] データ取得に失敗しました: {e}")
         sys.exit(1)
 
+    # 複数ペア（Top 3）を出力させるプロンプト調整
     prompt = f"""
 以下は "currencystrengthmeter.org" から取得したテキストデータです。
-このデータの中から主要通貨（USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD）の強弱関係を分析し、
-最も強い通貨(strongest)、最も弱い通貨(weakest)、推奨される通貨ペア(recommended_pair)、および売買方向(bias: "BUY" or "SELL")を特定してJSON形式で出力してください。
+このデータの中から主要通貨（USD, EUR, GBP, JPY, AUD, CAD, CHF, NZD）の強弱関係を分析し、以下のフォーマットでJSONを出力してください。
+
+【出力要件】
+- strongest: 最も強い通貨
+- weakest: 最も弱い通貨
+- currency_ranks: 各通貨の強さランキング（強い順の配列）
+- recommended_pairs: 強弱の差が大きい上位3つの推奨通貨ペアの配列。各要素には pair, bias ("BUY" または "SELL"), reason を含めること。
 
 【取得データ】
 {raw_text[:3000]}
@@ -60,7 +66,6 @@ def analyze():
     print("Gemini解析中 (モデル: gemini-3.5-flash-lite)...")
     
     try:
-        # 最新の推奨モデルを指定
         chat = client.chats.create(
             model="gemini-3.5-flash-lite",
             config=types.GenerateContentConfig(
@@ -70,14 +75,22 @@ def analyze():
         )
         
         response = chat.send_message(prompt)
+        result_data = json.loads(response.text)
         
-        print("\n=== 解析結果 (JSON) ===")
-        print(response.text)
-        print("=======================\n")
-        print("処理が正常に完了しました。")
+        # コンソール出力
+        print("\n=== 解析結果 ===")
+        print(json.dumps(result_data, indent=2, ensure_ascii=False))
+        print("================\n")
+        
+        # 2. JSONファイルとして保存 (result.json)
+        output_filename = "result.json"
+        with open(output_filename, "w", encoding="utf-8") as f:
+            json.dump(result_data, f, indent=4, ensure_ascii=False)
+            
+        print(f"解析結果を '{output_filename}' に保存しました。")
 
     except Exception as e:
-        print(f"[ERROR] Gemini API呼び出しエラー: {e}")
+        print(f"[ERROR] Gemini API呼び出しまたはファイル保存エラー: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
