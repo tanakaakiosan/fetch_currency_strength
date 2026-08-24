@@ -2,6 +2,7 @@ import os
 import json
 import sys
 import urllib.request
+from datetime import datetime, timezone, timedelta
 from html.parser import HTMLParser
 from google import genai
 from google.genai import types
@@ -77,15 +78,28 @@ def analyze():
         response = chat.send_message(prompt)
         result_data = json.loads(response.text)
         
+        # タイムスタンプ（日時）の追加
+        now_utc = datetime.now(timezone.utc)
+        now_jst = now_utc.astimezone(timezone(timedelta(hours=9)))
+        
+        # JSONデータの先頭に日時情報を追加
+        updated_info = {
+            "updated_at": now_jst.strftime("%Y-%m-%d %H:%M:%S JST"),
+            "updated_at_utc": now_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
+        }
+        
+        # 既存の解析結果と結合
+        final_result = {**updated_info, **result_data}
+        
         # コンソール出力
         print("\n=== 解析結果 ===")
-        print(json.dumps(result_data, indent=2, ensure_ascii=False))
+        print(json.dumps(final_result, indent=2, ensure_ascii=False))
         print("================\n")
         
-        # 2. JSONファイルとして保存 (result.json)
+        # JSONファイルとして保存 (result.json)
         output_filename = "result.json"
         with open(output_filename, "w", encoding="utf-8") as f:
-            json.dump(result_data, f, indent=4, ensure_ascii=False)
+            json.dump(final_result, f, indent=4, ensure_ascii=False)
             
         print(f"解析結果を '{output_filename}' に保存しました。")
 
