@@ -1,0 +1,31 @@
+{
+    "strongest": "USD",
+    "weakest": "JPY",
+    "currency_ranks": [
+        "USD",
+        "EUR",
+        "GBP",
+        "AUD",
+        "CAD",
+        "CHF",
+        "NZD",
+        "JPY"
+    ],
+    "recommended_pairs": [
+        {
+            "pair": "USD/JPY",
+            "bias": "BUY",
+            "reason": "USD is identified as the strongest major currency while JPY represents the weakest, presenting a high divergence for trend following."
+        },
+        {
+            "pair": "EUR/JPY",
+            "bias": "BUY",
+            "reason": "EUR holds a strong position in the upper ranks compared to the significantly weak JPY."
+        },
+        {
+            "pair": "GBP/JPY",
+            "bias": "BUY",
+            "reason": "GBP demonstrates substantial relative strength against the bottom-ranked JPY."
+        }
+    ]
+}
