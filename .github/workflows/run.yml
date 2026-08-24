@@ -1,0 +1,28 @@
+name: Currency Strength Monitor
+
+on:
+  schedule:
+    - cron: '*/5 * * * *' # 5分ごと
+  workflow_dispatch: # 手動実行用ボタン
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Python環境のセットアップ
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: ライブラリインストール
+        run: |
+          pip install google-genai
+          
+      - name: スクリプト実行
+        env:
+          # ここでGitHub Secretsの値を環境変数として渡す
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python main.py
