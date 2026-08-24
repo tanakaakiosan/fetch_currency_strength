@@ -1,6 +1,6 @@
 {
-    "updated_at": "2026-08-24 15:27:57 JST",
-    "updated_at_utc": "2026-08-24T06:27:57Z",
+    "updated_at": "2026-08-24 17:30:22 JST",
+    "updated_at_utc": "2026-08-24T08:30:22Z",
     "strongest": "USD",
     "weakest": "JPY",
     "currency_ranks": [
@@ -15,19 +15,19 @@
     ],
     "recommended_pairs": [
         {
-            "pair": "USD/JPY",
+            "pair": "USDJPY",
             "bias": "BUY",
-            "reason": "USD is identified as the strongest major currency while JPY represents the weakest, presenting a high divergence opportunity."
+            "reason": "USD is assessed as the strongest currency while JPY represents the weakest, showing the maximum divergence in relative strength."
         },
         {
-            "pair": "EUR/JPY",
+            "pair": "EURJPY",
             "bias": "BUY",
-            "reason": "EUR holds a strong position in the upper ranks compared to the severely weak JPY."
+            "reason": "EUR holds a high rank among major currencies while JPY remains at the bottom of the strength meter."
         },
         {
-            "pair": "GBP/JPY",
+            "pair": "GBPJPY",
             "bias": "BUY",
-            "reason": "GBP demonstrates significant relative strength over the weakest currency, JPY."
+            "reason": "GBP demonstrates strong relative performance compared to the extremely weak JPY."
         }
     ]
 }
