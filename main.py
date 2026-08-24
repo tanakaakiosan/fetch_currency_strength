@@ -3,6 +3,7 @@ import json
 import urllib.request
 from html.parser import HTMLParser
 from google import genai
+from google.genai import types
 
 # APIキーの取得
 api_key = os.environ.get("GEMINI_API_KEY")
@@ -23,7 +24,7 @@ class TextExtractor(HTMLParser):
             self.text.append(cleaned)
 
 def get_currency_page_text():
-    """Webページから直接テキストを安全に取得"""
+    """Webページからテキストを安全に取得"""
     url = "https://currencystrengthmeter.org/"
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -51,11 +52,17 @@ def analyze():
 """
     
     print("Gemini解析中...")
-    response = client.models.generate_content(
+    
+    # 推奨されている Chat セッション経由で呼び出し
+    chat = client.chats.create(
         model="gemini-2.5-flash-lite",
-        contents=prompt,
-        config={"response_mime_type": "application/json"}
+        config=types.GenerateContentConfig(
+            response_mime_type="application/json",
+            temperature=0.2
+        )
     )
+    
+    response = chat.send_message(prompt)
     
     print("--- 解析結果 ---")
     print(response.text)
